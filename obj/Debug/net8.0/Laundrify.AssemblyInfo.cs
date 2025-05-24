@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Laundrify")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9ce12e6fd4c2cdf7706b282ff24f3a6e227071b7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a1f6de44e17fd7b87b7765a3c8c64eb53c174505")]
 [assembly: System.Reflection.AssemblyProductAttribute("Laundrify")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Laundrify")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

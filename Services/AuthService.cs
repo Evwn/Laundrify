@@ -1,5 +1,4 @@
 using Laundrify.Data;
-using Laundrify.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
@@ -25,7 +24,7 @@ namespace Laundrify.Services
             if (user == null) return false;
 
             var hashedPassword = HashPassword(password);
-            if (user.Password != hashedPassword) return false;
+            if (user.PasswordHash != hashedPassword) return false;
 
             var claims = new List<Claim>
             {

@@ -15,30 +15,31 @@ namespace Laundrify.Pages.Account
         {
             _authService = authService;
             _logger = logger;
+            Input = new InputModel();
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
 
         public class InputModel
         {
             [Required]
             [EmailAddress]
-            public string Email { get; set; }
+            public string Email { get; set; } = string.Empty;
 
             [Required]
             [DataType(DataType.Password)]
-            public string Password { get; set; }
+            public string Password { get; set; } = string.Empty;
         }
 
-        public void OnGet(string returnUrl = null)
+        public void OnGet(string? returnUrl = null)
         {
             ReturnUrl = returnUrl ?? Url.Content("~/");
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
 

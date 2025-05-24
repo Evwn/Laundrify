@@ -1,0 +1,69 @@
+@page
+@using Laundrify.Data
+@using Microsoft.AspNetCore.Authorization
+@inject ApplicationDbContext Db
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var totalOrders = Db.Orders.Count();
+    var pendingOrders = Db.Orders.Count(o => o.Status == "Pending");
+    var totalClients = Db.Users.Count(u => u.Role == "Client");
+    var totalServices = Db.Services.Count();
+}
+
+<div class="container">
+    <h1 class="mb-4">Admin Dashboard</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Total Orders</h5>
+                    <p class="card-text display-4">@totalOrders</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Orders</h5>
+                    <p class="card-text display-4">@pendingOrders</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Total Clients</h5>
+                    <p class="card-text display-4">@totalClients</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">Total Services</h5>
+                    <p class="card-text display-4">@totalServices</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <div class="list-group">
+                        <a href="/Admin/ManageOrders" class="list-group-item list-group-item-action">
+                            <i class="fas fa-list"></i> Manage Orders
+                        </a>
+                        <a href="/Admin/AddService" class="list-group-item list-group-item-action">
+                            <i class="fas fa-plus"></i> Add New Service
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

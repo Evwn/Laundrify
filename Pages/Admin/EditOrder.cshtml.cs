@@ -30,7 +30,7 @@ namespace Laundrify.Pages.Admin
         {
             Order = _db.Orders.Include(o => o.Client).Include(o => o.Service).FirstOrDefault(o => o.Id == id);
             if (Order == null)
-                return RedirectToPage("/Admin/Orders");
+                return RedirectToPage("/Admin/ManageOrders");
             return Page();
         }
 

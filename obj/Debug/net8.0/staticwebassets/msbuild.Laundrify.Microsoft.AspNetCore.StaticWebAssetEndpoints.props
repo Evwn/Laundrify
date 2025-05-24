@@ -40,13 +40,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Laundrify.bsart5ojoq.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"bsart5ojoq"},{"Name":"integrity","Value":"sha256-pd/3wLalVGKV/sIQIo8SiIqTDqpkvU68qwIbuKPlsRQ="},{"Name":"label","Value":"_content/Laundrify/Laundrify.bundle.scp.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1127"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022pd/3wLalVGKV/sIQIo8SiIqTDqpkvU68qwIbuKPlsRQ=\u0022"},{"Name":"Last-Modified","Value":"Sat, 24 May 2025 07:56:11 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1127"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022pd/3wLalVGKV/sIQIo8SiIqTDqpkvU68qwIbuKPlsRQ=\u0022"},{"Name":"Last-Modified","Value":"Sat, 24 May 2025 09:07:36 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/Laundrify/Laundrify.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Laundrify.bsart5ojoq.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-pd/3wLalVGKV/sIQIo8SiIqTDqpkvU68qwIbuKPlsRQ="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1127"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022pd/3wLalVGKV/sIQIo8SiIqTDqpkvU68qwIbuKPlsRQ=\u0022"},{"Name":"Last-Modified","Value":"Sat, 24 May 2025 07:56:11 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1127"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022pd/3wLalVGKV/sIQIo8SiIqTDqpkvU68qwIbuKPlsRQ=\u0022"},{"Name":"Last-Modified","Value":"Sat, 24 May 2025 09:07:36 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/Laundrify/lib/bootstrap/dist/css/bootstrap-grid.agp80tu62r.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap-grid.css'))</AssetFile>

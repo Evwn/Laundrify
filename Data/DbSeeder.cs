@@ -1,4 +1,3 @@
-using Laundrify.Models;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -17,7 +16,7 @@ namespace Laundrify.Data
                 context.Users.Add(new User
                 {
                     Email = adminEmail,
-                    Password = HashPassword("Admin#123"),
+                    PasswordHash = HashPassword("Admin#123"),
                     Role = "Admin"
                 });
             }
@@ -31,7 +30,7 @@ namespace Laundrify.Data
                     context.Users.Add(new User
                     {
                         Email = clientEmail,
-                        Password = HashPassword($"Client#{i}23"),
+                        PasswordHash = HashPassword($"Client#{i}23"),
                         Role = "Client"
                     });
                 }

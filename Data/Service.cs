@@ -1,15 +1,11 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Laundrify.Data
 {
     public class Service
     {
         public int Id { get; set; }
-        [Required]
-        public string Name { get; set; }
-        [Required]
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
-        [Required]
-        public string UnitType { get; set; } // e.g., 'kg', 'item'
+        public string UnitType { get; set; } = string.Empty;
     }
 } 

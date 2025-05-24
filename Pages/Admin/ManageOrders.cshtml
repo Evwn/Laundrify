@@ -1,0 +1,117 @@
+@page
+@using Laundrify.Data
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext Db
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Manage Orders";
+    var orders = Db.Orders
+        .Include(o => o.Client)
+        .Include(o => o.Service)
+        .OrderByDescending(o => o.DropOffDate)
+        .ToList();
+}
+
+<div class="container">
+    <h1 class="mb-4">Manage Orders</h1>
+
+    @if (!orders.Any())
+    {
+        <div class="alert alert-info">No orders found.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Service</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Drop-Off</th>
+                        <th>Pick-Up</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in orders)
+                    {
+                        <tr>
+                            <td>@order.Client?.Email</td>
+                            <td>@order.Service?.Name</td>
+                            <td>@order.Quantity.ToString("N2")</td>
+                            <td>
+                                <select class="form-select status-select" data-order-id="@order.Id">
+                                    <option value="Pending" selected="@(order.Status == "Pending")">Pending</option>
+                                    <option value="Processing" selected="@(order.Status == "Processing")">Processing</option>
+                                    <option value="Ready" selected="@(order.Status == "Ready")">Ready</option>
+                                    <option value="Completed" selected="@(order.Status == "Completed")">Completed</option>
+                                    <option value="Cancelled" selected="@(order.Status == "Cancelled")">Cancelled</option>
+                                </select>
+                            </td>
+                            <td>@order.DropOffDate.ToShortDateString()</td>
+                            <td>@order.PickUpDate.ToShortDateString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Status update handling
+        document.querySelectorAll('.status-select').forEach(select => {
+            select.addEventListener('change', async function() {
+                const orderId = parseInt(this.dataset.orderId);
+                const newStatus = this.value;
+                
+                try {
+                    const response = await fetch(`/Admin/EditOrder/${orderId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        },
+                        body: JSON.stringify({
+                            Order: {
+                                Id: orderId,
+                                Status: newStatus
+                            }
+                        })
+                    });
+
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Order status updated successfully',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: error.message || 'Failed to update order status'
+                    });
+                    // Reset the select to its previous value
+                    this.value = this.dataset.originalValue;
+                }
+            });
+
+            // Store original value when focus
+            select.addEventListener('focus', function() {
+                this.dataset.originalValue = this.value;
+            });
+        });
+    </script>
+} 

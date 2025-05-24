@@ -1,13 +1,28 @@
 using Laundrify.Data;
 using Laundrify.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeFolder("/Admin", "Admin");
+    options.Conventions.AuthorizeFolder("/Client", "Client");
+});
+
+// Get connection string
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+}
+
+// Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Add custom authentication
@@ -16,11 +31,17 @@ builder.Services.AddAuthentication("CustomAuth")
     {
         options.LoginPath = "/Account/Login";
         options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/AccessDenied";
     });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Client", policy => policy.RequireRole("Client"));
+});
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -49,8 +70,18 @@ app.MapRazorPages();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApplicationDbContext>();
-    DbSeeder.Seed(context).Wait();
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        context.Database.Migrate(); // Apply any pending migrations
+        DbSeeder.Seed(context).Wait();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+        throw;
+    }
 }
 
 app.Run();

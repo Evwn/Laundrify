@@ -5,4 +5,89 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="privacy-content">
+    <section class="mb-4">
+        <h2>Introduction</h2>
+        <p>At Laundrify, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our laundry service platform.</p>
+    </section>
+
+    <section class="mb-4">
+        <h2>Information We Collect</h2>
+        <h3>Personal Information</h3>
+        <ul>
+            <li>Name and contact information</li>
+            <li>Email address</li>
+            <li>Billing and payment information</li>
+            <li>Service preferences and history</li>
+        </ul>
+
+        <h3>Usage Information</h3>
+        <ul>
+            <li>Order history and preferences</li>
+            <li>Service interactions</li>
+            <li>Device and browser information</li>
+            <li>IP address and location data</li>
+        </ul>
+    </section>
+
+    <section class="mb-4">
+        <h2>How We Use Your Information</h2>
+        <p>We use the collected information to:</p>
+        <ul>
+            <li>Process and manage your laundry orders</li>
+            <li>Provide customer support</li>
+            <li>Send service notifications and updates</li>
+            <li>Improve our services and user experience</li>
+            <li>Process payments and prevent fraud</li>
+        </ul>
+    </section>
+
+    <section class="mb-4">
+        <h2>Data Security</h2>
+        <p>We implement appropriate security measures to protect your personal information, including:</p>
+        <ul>
+            <li>Encryption of sensitive data</li>
+            <li>Secure payment processing</li>
+            <li>Regular security assessments</li>
+            <li>Limited access to personal information</li>
+        </ul>
+    </section>
+
+    <section class="mb-4">
+        <h2>Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+            <li>Access your personal information</li>
+            <li>Correct inaccurate data</li>
+            <li>Request deletion of your data</li>
+            <li>Opt-out of marketing communications</li>
+        </ul>
+    </section>I
+
+    <section class="mb-4">
+        <h2>Updates to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. The latest version will always be posted on this page with the effective date.</p>
+        <p>Last updated: @DateTime.Now.ToString("MMMM dd, yyyy")</p>
+    </section>
+</div>
+
+<style>
+    .privacy-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .privacy-content h2 {
+        color: #1b6ec2;
+        margin-top: 1.5rem;
+    }
+    .privacy-content h3 {
+        color: #333;
+        margin-top: 1rem;
+    }
+    .privacy-content ul {
+        margin-bottom: 1rem;
+    }
+    .privacy-content li {
+        margin-bottom: 0.5rem;
+    }
+</style>
