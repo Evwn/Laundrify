@@ -152,6 +152,7 @@ C:\Users\admin\source\repos\laundrify\obj\Debug\net8.0\Laundrify.csproj.CoreComp
 C:\Users\admin\source\repos\laundrify\obj\Debug\net8.0\Laundrify.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\admin\source\repos\laundrify\obj\Debug\net8.0\Laundrify.RazorAssemblyInfo.cache
 C:\Users\admin\source\repos\laundrify\obj\Debug\net8.0\Laundrify.RazorAssemblyInfo.cs
+C:\Users\admin\source\repos\laundrify\obj\Debug\net8.0\Laundrify.sourcelink.json
 C:\Users\admin\source\repos\laundrify\obj\Debug\net8.0\scopedcss\Pages\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\admin\source\repos\laundrify\obj\Debug\net8.0\scopedcss\bundle\Laundrify.styles.css
 C:\Users\admin\source\repos\laundrify\obj\Debug\net8.0\scopedcss\projectbundle\Laundrify.bundle.scp.css

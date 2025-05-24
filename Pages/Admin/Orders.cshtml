@@ -21,6 +21,7 @@
 }
 <h2>Manage Orders</h2>
 <div id="statusMessage" class="alert alert-success d-none" role="alert"></div>
+@Html.AntiForgeryToken()
 <table class="table">
     <thead>
         <tr>
@@ -77,12 +78,15 @@
             selectElement.disabled = true;
             selectElement.classList.add('is-loading');
             
+            // Get the anti-forgery token
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+            
             // Send AJAX request
-            fetch(`/Admin/EditOrder/${orderId}`, {
+            fetch(`/Admin/EditOrder`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    'RequestVerificationToken': token
                 },
                 body: JSON.stringify({
                     Order: {
@@ -92,18 +96,24 @@
                 })
             })
             .then(response => {
-                if (response.ok) {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
                     // Update successful
                     selectElement.setAttribute('data-original-value', newStatus);
                     selectElement.classList.remove('is-loading');
                     selectElement.disabled = false;
-                    showMessage('Order status updated successfully!');
+                    showMessage(data.message || 'Order status updated successfully!');
                 } else {
                     // Update failed
                     selectElement.value = originalValue;
                     selectElement.classList.remove('is-loading');
                     selectElement.disabled = false;
-                    showMessage('Failed to update status. Please try again.', false);
+                    showMessage(data.message || 'Failed to update status. Please try again.', false);
                 }
             })
             .catch(error => {
@@ -111,7 +121,8 @@
                 selectElement.value = originalValue;
                 selectElement.classList.remove('is-loading');
                 selectElement.disabled = false;
-                showMessage('An error occurred. Please try again.', false);
+                showMessage(`Error: ${error.message}. Please try again.`, false);
+                console.error('Error:', error);
             });
         }
 
