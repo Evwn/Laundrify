@@ -1,0 +1,76 @@
+@page
+@model Laundrify.Pages.Client.PlaceOrderModel
+@using Laundrify.Data
+@using Microsoft.AspNetCore.Authorization
+@inject ApplicationDbContext Db
+@attribute [Authorize(Roles = "Client")]
+@{
+    ViewData["Title"] = "Place New Order";
+    var services = Db.Services.ToList();
+}
+<h2>Place New Order</h2>
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-warning">
+        @Model.Message
+    </div>
+}
+<form method="post" class="needs-validation" novalidate>
+    <div class="form-group mb-3">
+        <label for="ServiceId">Service</label>
+        <select id="ServiceId" name="ServiceId" class="form-control" required>
+            <option value="">-- Select Service --</option>
+            @foreach (var service in services)
+            {
+                <option value="@service.Id" data-unit="@service.UnitType" data-price="@service.Price">
+                    @service.Name (@service.Price per @service.UnitType)
+                </option>
+            }
+        </select>
+        <div class="invalid-feedback">Please select a service.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="Quantity">Quantity</label>
+        <input type="number" id="Quantity" name="Quantity" class="form-control" min="0.1" step="0.1" required />
+        <small id="unitHelp" class="form-text text-muted"></small>
+        <div class="invalid-feedback">Please enter a valid quantity.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="DropOffDate">Drop-Off Date</label>
+        <input type="date" id="DropOffDate" name="DropOffDate" class="form-control" required />
+        <div class="invalid-feedback">Please select a drop-off date.</div>
+    </div>
+    <div class="form-group mb-3">
+        <label for="PickUpDate">Pick-Up Date</label>
+        <input type="date" id="PickUpDate" name="PickUpDate" class="form-control" required />
+        <div class="invalid-feedback">Please select a pick-up date.</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Place Order</button>
+</form>
+
+@section Scripts {
+    <script>
+        // Show unit type and price dynamically
+        document.getElementById('ServiceId').addEventListener('change', function() {
+            var selected = this.options[this.selectedIndex];
+            var unit = selected.getAttribute('data-unit');
+            var price = selected.getAttribute('data-price');
+            document.getElementById('unitHelp').textContent = unit ? `Enter quantity in ${unit}. Price: ${price} per ${unit}` : '';
+        });
+
+        // Form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+} 

@@ -1,0 +1,35 @@
+@page
+@using Laundrify.Data
+@using Microsoft.AspNetCore.Authorization
+@inject ApplicationDbContext Db
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Manage Services";
+    var services = Db.Services.ToList();
+}
+<h2>Manage Services</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Unit Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var service in services)
+    {
+        <tr>
+            <td>@service.Name</td>
+            <td>@service.Price</td>
+            <td>@service.UnitType</td>
+            <td>
+                <a asp-page="/Admin/EditService" asp-route-id="@service.Id">Edit</a> |
+                <a asp-page="/Admin/DeleteService" asp-route-id="@service.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<a asp-page="/Admin/AddService" class="btn btn-primary">Add New Service</a> 

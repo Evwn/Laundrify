@@ -1,0 +1,58 @@
+@page "{id:int}"
+@model Laundrify.Pages.Admin.EditOrderModel
+@using Laundrify.Data
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Change Order Status";
+    var statuses = new[] { "Pending", "Ready", "Completed", "Postponed", "Canceled" };
+}
+<h2>Change Order Status</h2>
+@if (Model.Order != null)
+{
+    <div>
+        <strong>Client:</strong> @Model.Order.Client?.Email <br />
+        <strong>Service:</strong> @Model.Order.Service?.Name <br />
+        <strong>Quantity:</strong> @Model.Order.Quantity <br />
+        <strong>Drop-Off:</strong> @Model.Order.DropOffDate.ToShortDateString() <br />
+        <strong>Pick-Up:</strong> @Model.Order.PickUpDate.ToShortDateString() <br />
+    </div>
+    <form method="post" id="statusForm">
+        <input type="hidden" asp-for="Order.Id" />
+        <div class="form-group">
+            <label for="Status">Status</label>
+            <select asp-for="Order.Status" class="form-control">
+                @foreach (var status in statuses)
+                {
+                    <option value="@status" selected="@(Model.Order.Status == status)">@status</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" id="saveButton">
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true" id="loadingSpinner"></span>
+            Save
+        </button>
+        <a asp-page="/Admin/Orders" class="btn btn-secondary">Cancel</a>
+    </form>
+}
+else
+{
+    <div class="alert alert-danger">Order not found.</div>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById('statusForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading spinner
+            const spinner = document.getElementById('loadingSpinner');
+            const saveButton = document.getElementById('saveButton');
+            spinner.classList.remove('d-none');
+            saveButton.disabled = true;
+            
+            // Submit the form
+            this.submit();
+        });
+    </script>
+} 

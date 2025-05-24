@@ -1,0 +1,29 @@
+@page "{id:int}"
+@model Laundrify.Pages.Admin.EditServiceModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Edit Service";
+}
+<h2>Edit Service</h2>
+<form method="post">
+    <input type="hidden" asp-for="Service.Id" />
+    <div class="form-group">
+        <label asp-for="Service.Name"></label>
+        <input asp-for="Service.Name" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Service.Price"></label>
+        <input asp-for="Service.Price" class="form-control" type="number" min="0.1" step="0.1" required />
+    </div>
+    <div class="form-group">
+        <label asp-for="Service.UnitType"></label>
+        <input asp-for="Service.UnitType" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-page="/Admin/Services" class="btn btn-secondary">Cancel</a>
+</form>
+@if (Model.Message != null)
+{
+    <div class="alert alert-info">@Model.Message</div>
+} 

@@ -1,0 +1,23 @@
+@page "{id:int}"
+@model Laundrify.Pages.Admin.DeleteServiceModel
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Delete Service";
+}
+<h2>Delete Service</h2>
+@if (Model.Service != null)
+{
+    <div class="alert alert-warning">
+        Are you sure you want to delete the service <strong>@Model.Service.Name</strong>?
+    </div>
+    <form method="post">
+        <input type="hidden" asp-for="Service.Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-page="/Admin/Services" class="btn btn-secondary">Cancel</a>
+    </form>
+}
+else
+{
+    <div class="alert alert-danger">Service not found.</div>
+} 

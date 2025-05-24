@@ -1,0 +1,125 @@
+@page
+@using Laundrify.Data
+@using Microsoft.AspNetCore.Authorization
+@inject ApplicationDbContext Db
+@attribute [Authorize(Roles = "Admin")]
+@{
+    ViewData["Title"] = "Manage Orders";
+    var orders = Db.Orders
+        .Select(o => new {
+            o.Id,
+            o.Status,
+            o.Quantity,
+            o.DropOffDate,
+            o.PickUpDate,
+            ServiceName = o.Service.Name,
+            ClientEmail = o.Client.Email
+        })
+        .ToList();
+
+    var statuses = new[] { "Pending", "Ready", "Completed", "Postponed", "Canceled" };
+}
+<h2>Manage Orders</h2>
+<div id="statusMessage" class="alert alert-success d-none" role="alert"></div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Client</th>
+            <th>Service</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Drop-Off</th>
+            <th>Pick-Up</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var order in orders)
+    {
+        <tr>
+            <td>@order.ClientEmail</td>
+            <td>@order.ServiceName</td>
+            <td>@order.Quantity</td>
+            <td>
+                <select class="form-select status-select" data-order-id="@order.Id" onchange="updateStatus(this)">
+                    @foreach (var status in statuses)
+                    {
+                        <option value="@status" selected="@(order.Status == status)">@status</option>
+                    }
+                </select>
+            </td>
+            <td>@order.DropOffDate.ToShortDateString()</td>
+            <td>@order.PickUpDate.ToShortDateString()</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function showMessage(message, isSuccess = true) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.textContent = message;
+            statusMessage.classList.remove('d-none', 'alert-success', 'alert-danger');
+            statusMessage.classList.add(isSuccess ? 'alert-success' : 'alert-danger');
+            
+            // Hide message after 3 seconds
+            setTimeout(() => {
+                statusMessage.classList.add('d-none');
+            }, 3000);
+        }
+
+        function updateStatus(selectElement) {
+            const orderId = selectElement.dataset.orderId;
+            const newStatus = selectElement.value;
+            const originalValue = selectElement.getAttribute('data-original-value');
+            
+            // Show loading state
+            selectElement.disabled = true;
+            selectElement.classList.add('is-loading');
+            
+            // Send AJAX request
+            fetch(`/Admin/EditOrder/${orderId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: JSON.stringify({
+                    Order: {
+                        Id: orderId,
+                        Status: newStatus
+                    }
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Update successful
+                    selectElement.setAttribute('data-original-value', newStatus);
+                    selectElement.classList.remove('is-loading');
+                    selectElement.disabled = false;
+                    showMessage('Order status updated successfully!');
+                } else {
+                    // Update failed
+                    selectElement.value = originalValue;
+                    selectElement.classList.remove('is-loading');
+                    selectElement.disabled = false;
+                    showMessage('Failed to update status. Please try again.', false);
+                }
+            })
+            .catch(error => {
+                // Handle error
+                selectElement.value = originalValue;
+                selectElement.classList.remove('is-loading');
+                selectElement.disabled = false;
+                showMessage('An error occurred. Please try again.', false);
+            });
+        }
+
+        // Store original values when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.status-select').forEach(select => {
+                select.setAttribute('data-original-value', select.value);
+            });
+        });
+    </script>
+} 

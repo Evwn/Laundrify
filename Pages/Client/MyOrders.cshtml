@@ -1,0 +1,64 @@
+@page
+@using Laundrify.Data
+@using Microsoft.AspNetCore.Authorization
+@inject ApplicationDbContext Db
+@attribute [Authorize(Roles = "Client")]
+@{
+    ViewData["Title"] = "My Orders";
+    var userEmail = User.Identity?.Name;
+    var user = Db.Users.FirstOrDefault(u => u.Email == userEmail);
+    var orders = new List<dynamic>();
+    
+    if (user != null)
+    {
+        orders = Db.Orders
+            .Where(o => o.ClientId == user.Id)
+            .Select(o => new {
+                o.Status,
+                o.Quantity,
+                o.DropOffDate,
+                o.PickUpDate,
+                ServiceName = o.Service.Name
+            })
+            .ToList<dynamic>();
+    }
+}
+<h2>My Orders</h2>
+@if (user == null)
+{
+    <div class="alert alert-warning">
+        User information not found. Please try logging in again.
+    </div>
+}
+else if (!orders.Any())
+{
+    <div class="alert alert-info">
+        You haven't placed any orders yet.
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Service</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Drop-Off</th>
+                <th>Pick-Up</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var order in orders)
+        {
+            <tr>
+                <td>@order.ServiceName</td>
+                <td>@order.Quantity</td>
+                <td>@order.Status</td>
+                <td>@order.DropOffDate.ToShortDateString()</td>
+                <td>@order.PickUpDate.ToShortDateString()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+} 

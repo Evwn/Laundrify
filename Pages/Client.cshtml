@@ -1,0 +1,11 @@
+@page
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Client")]
+@{
+    ViewData["Title"] = "Client Dashboard";
+}
+<h2>Client Dashboard</h2>
+<ul>
+    <li><a asp-page="/Client/PlaceOrder">Place New Order</a></li>
+    <li><a asp-page="/Client/MyOrders">My Orders</a></li>
+</ul> 
